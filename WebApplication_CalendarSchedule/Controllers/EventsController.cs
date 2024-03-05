@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using WebApplication_CalendarSchedule.Data;
 using WebApplication_CalendarSchedule.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApplication_CalendarSchedule.Controllers
 {
@@ -14,10 +15,13 @@ namespace WebApplication_CalendarSchedule.Controllers
 	public class EventsController : ControllerBase
 	{
 		private readonly AppDbContext _context;
+		private readonly IConfiguration _conf;
 
-		public EventsController(AppDbContext context)
+		//Получение данных бд
+		public EventsController(AppDbContext context, IConfiguration configuration)
 		{
 			_context = context;
+			_conf = configuration;
 		}
 
 		[HttpGet]
@@ -25,13 +29,9 @@ namespace WebApplication_CalendarSchedule.Controllers
 		{
 			List<Event> events = new List<Event>();
 
-
-			string connectionString = "Host=localhost;Port=5432;Database=calendarscheduledb;Username=postgres;Password=admin";
-
 			//Запрос к БД
-			using (var connection = new NpgsqlConnection(connectionString))
+			using (var connection = _context.GetConnection())
 			{
-				connection.Open();
 
 				using (var command = new NpgsqlCommand("SELECT * FROM getevents()", connection))
 				{
