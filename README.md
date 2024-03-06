@@ -23,6 +23,7 @@
 ![image](https://github.com/UnforgettableStorm/WebApplication_CalendarSchedule/assets/78379528/e108632b-f96e-463b-9a88-389d241fa9e3)
 
 Для работы с базой данных были созданы 3 хранимые процедуры (insert, delete, update) и 1 функция для выборки данных.
+
 ![image](https://github.com/UnforgettableStorm/WebApplication_CalendarSchedule/assets/78379528/5ecab6a6-9472-485c-a3b0-9a3211550612)
 
 Backup базы данных для сервера PostgreSQL16 прилагается.
