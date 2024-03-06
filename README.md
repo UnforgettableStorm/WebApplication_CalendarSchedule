@@ -19,6 +19,11 @@
 4. Результат:
 ![image](https://github.com/UnforgettableStorm/WebApplication_CalendarSchedule/assets/78379528/a8b09cb7-f90d-467b-8031-2d3f40e9dc2b)
 
+### ER диаграмма базы данных (PostgreSQL)
+![image](https://github.com/UnforgettableStorm/WebApplication_CalendarSchedule/assets/78379528/e108632b-f96e-463b-9a88-389d241fa9e3)
+
+
+
 
    
 
