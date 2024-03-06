@@ -7,6 +7,8 @@ using System.Linq;
 using WebApplication_CalendarSchedule.Data;
 using WebApplication_CalendarSchedule.Models;
 using Microsoft.Extensions.Configuration;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Data;
 
 namespace WebApplication_CalendarSchedule.Controllers
 {
@@ -62,6 +64,75 @@ namespace WebApplication_CalendarSchedule.Controllers
 			}
 
 			return Ok(events);
+		}
+
+		//Добавление ивента
+		[HttpPost]
+		public IActionResult AddEvent(Event evt)
+		{
+			using (var connection = _context.GetConnection())
+			{
+				using (var cmd = new NpgsqlCommand(@"CALL insert_event(:i_eventname, :i_eventdescription, :i_eventstart, :i_eventend, :i_eventtypename, :i_isfullday)", connection))
+				{
+					cmd.CommandType = CommandType.Text;
+
+					cmd.Parameters.AddWithValue("i_eventname", evt.Title);
+					cmd.Parameters.AddWithValue("i_eventdescription", evt.Description);
+					cmd.Parameters.AddWithValue("i_eventstart", evt.Start);
+					cmd.Parameters.AddWithValue("i_eventend", evt.End);
+					cmd.Parameters.AddWithValue("i_eventtypename", evt.EventType.TypeName);
+					cmd.Parameters.AddWithValue("i_isfullday", evt.IsFullDay);
+
+					cmd.ExecuteNonQuery();
+				}
+
+			}
+
+			return Ok();
+		}
+
+		//Обновление ивента при редактировании
+		[HttpPut("{id}")]
+		public IActionResult UpdateEvent(int id, Event evt)
+		{
+			using (var connection = _context.GetConnection())
+			{
+				using (var cmd = new NpgsqlCommand(@"CALL update_event(:u_eventid, :u_eventname, :u_eventdescription, :u_eventstart, :u_eventend, :u_eventtypename, :u_isfullday)", connection))
+				{
+					cmd.CommandType = CommandType.Text;
+
+					cmd.Parameters.AddWithValue("u_eventid", id);
+					cmd.Parameters.AddWithValue("u_eventname", evt.Title);
+					cmd.Parameters.AddWithValue("u_eventdescription", evt.Description);
+					cmd.Parameters.AddWithValue("u_eventstart", evt.Start);
+					cmd.Parameters.AddWithValue("u_eventend", evt.End);
+					cmd.Parameters.AddWithValue("u_eventtypename", evt.EventType.TypeName);
+					cmd.Parameters.AddWithValue("u_isfullday", evt.IsFullDay);
+
+					cmd.ExecuteNonQuery();
+				}
+
+			}
+
+			return Ok();
+		}
+
+		//Удаление ивента
+		[HttpDelete("{id:int}")]
+		public IActionResult DeleteEvent(int id)
+		{
+			using (var connection = _context.GetConnection())
+			{
+				using (var cmd = new NpgsqlCommand(@"CALL delete_event (:d_eventid)", connection))
+				{
+					cmd.CommandType = CommandType.Text;
+
+					cmd.Parameters.AddWithValue("d_eventid", id);
+
+					cmd.ExecuteNonQuery();
+				}
+			}
+			return Ok();
 		}
 	}
 }
